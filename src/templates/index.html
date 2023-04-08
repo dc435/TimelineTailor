@@ -1,0 +1,151 @@
+{%extends 'base.html' %}
+
+{%block content%}
+
+<div class="d-flex flex-column mb-3 align-items-center">
+    <p class="buffer"></p>
+    <h1>Timeline Tailor</h1>
+    <h4>Timelines from your text - in seconds.</h4>
+    <p class="buffer"></p>
+    <p class="buffer"></p>
+    <h5 class="text-center">Paste your text below. <i>Timeline Tailor</i> will produce a chronology of the events it describes.</h5>
+    <h5 class="text-center">Click <a href="https://www.timelinetailor.com/help/" target="_blank">here</a> for further instructions and examples.</h5>
+	<p class="buffer"></p>
+	<textarea class="form-control" id="textArea" rows="15" placeholder="Paste your source text here"></textarea>    
+	<p class="buffer"></p>
+	<div>
+		<span class="p-2"></span>
+		<label id="currentLen" style="height: 30px;">Character Count: 0</label>
+		<span class="p-2">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x" viewBox="0 0 16 16">
+				<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+			</svg>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="limegreen" class="bi bi-check-lg" viewBox="0 0 16 16">
+				<path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+			</svg>				
+		</span>
+	</div>
+	<p>Max: 500,000 characters (~100,000 words)</p>
+	<p class="buffer"></p>
+	<div class="d-flex justify-content-center">
+		<input class="form-control text-center" id="jobname" type="text" placeholder="Your Reference (optional)">	
+	</div>
+    <p class="buffer"></p>
+    <button type="button" class="btn btn-primary btn-lg" id="UploadBtn" style><b>Get Timeline</b></button>
+	<div id="clickTooltip"></div>
+	<p class="buffer"></p>
+</div>
+
+<style>
+
+	#clickTooltip {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background-color: black;
+		color: white;
+		padding: 8px;
+		border-radius: 5px;
+		z-index: 1;
+		text-align: center;
+	}
+
+	#UploadBtn {
+		box-shadow: 0 0.5rem 0.9rem #0000004d;
+		background-color: #08306dd0;
+		border-color: #08306dd0;
+		color: white;
+	}
+
+	#UploadBtn:active {
+		background-color: #041735d0;
+		border-color: #041735d0;
+	}
+
+</style>
+
+<script>
+
+let textArea = document.getElementById("textArea");
+let uploadButton = document.getElementById("UploadBtn");
+let currentLen = document.getElementById("currentLen");
+let checkIcon = document.querySelector(".bi-check-lg");
+let crossIcon = document.querySelector(".bi-x");
+let tooltip = document.getElementById("clickTooltip");
+
+let minChar = 500
+let maxChar = 500000
+
+checkIcon.style.display = "none";
+crossIcon.style.display = "inline";
+
+textArea.addEventListener("input", function(e) {
+
+	text = textArea.value;
+	charCount = text.length;
+	currentLen.innerHTML = "Character Count: " + charCount.toLocaleString("en-US")
+
+	if (charCount >= minChar && charCount <= maxChar) {
+		checkIcon.style.display = "inline";
+		crossIcon.style.display = "none";
+	} else {
+		checkIcon.style.display = "none";
+		crossIcon.style.display = "inline";
+	}
+
+});
+
+uploadButton.addEventListener("click", function(e) {
+	
+	text = textArea.value;
+	charCount = text.length;
+
+	if (charCount >= minChar && charCount <= maxChar) {
+
+		const user_input = {"text": textArea.value, "jobname": jobname.value};
+		const endpoint = "/new_job/";
+
+		console.log("upload clicked")
+		console.log("user_input: ", user_input)
+		console.log("endpoint: ", endpoint)
+
+		fetch(endpoint, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(user_input)})
+		.then((response) => response.json())
+		.then((response) => {
+			if (response.success) {
+				window.location.href = response.url;
+			} else {
+				window.alert(response.message);
+			}
+		});
+				
+	} else {
+
+		if (charCount > maxChar) {
+			tooltip.innerHTML = "< Too long! Maximum length is 500,000 characters (~100,000 words)."
+		}
+
+		if (charCount < minChar) {
+			tooltip.innerHTML = "< Too short! Minimum length is 500 characters (~100 words)."
+		}
+
+		clickTooltip.style.display = "block";
+		const buttonRect = uploadButton.getBoundingClientRect();
+		const tooltipRect = clickTooltip.getBoundingClientRect();
+		clickTooltip.style.left = buttonRect.left + (buttonRect.width) + 10 + "px";
+		clickTooltip.style.top = buttonRect.top - (tooltipRect.height / 2) + (buttonRect.height / 2) + "px";
+		setTimeout(() => {
+			clickTooltip.style.display = "none";
+		}, 3000);
+
+	}
+
+});
+
+</script>
+
+{%endblock content%}

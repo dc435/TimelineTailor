@@ -1,0 +1,93 @@
+{%extends 'base.html' %}
+
+{%block content%}
+
+<div class="d-flex flex-column mb-3 align-items-center">
+    <p class="buffer"></p>
+    <h4>Timeline Tailor</h4>
+    <p class="buffer"></p>
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+          <span class="sr-only"></span>
+        </div>
+    </div>
+    <p class="buffer"></p>    
+    <p id="status_update" class="fst-italic">Your job is processing.</p>
+    <p class="buffer"></p>
+    <p class="buffer"></p>
+    <h6 class="text-center">Processing may take several minutes, especially for larger texts. When the job is processed, your results will be available at the url below. Save the url if you wish to access your results later:</h6>
+    <p class="buffer"></p>
+    <div>
+        <span class="border rounded copyblock p-4" id="btnCopy">
+            <b>{{resultsurl}}</b>
+            <span class="p-2"></span>
+            <button type="button" class="btn btn-light p-2" data-toggle="tooltip" data-placement="top" title="Copy URL to clipboard">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                </svg>   
+            </button>
+            <div id="tooltip">Copied</div>
+        </span>               
+    </div>
+    <p class="p-2"><small id="copyUpdate" ></small></p>
+</div>
+
+
+<script type = "text/javascript">
+    
+    const status_update = document.getElementById("status_update");
+
+    setInterval(function() {
+        fetch("/get_update/{{jobid}}", {method: "GET"})
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.done) {
+                    status_update.innerHTML = response.message;
+                    window.location.href = '/results/{{jobid}}';
+                } else if (response.error) {
+                    window.alert(response.message)
+                    window.location.href = '/';
+                } else {
+                    status_update.innerHTML = response.message;
+                }
+  	        })
+        },"{{update_interval}}");
+
+    let btnCopy = document.getElementById("btnCopy");
+    let tooltip = document.getElementById("tooltip");
+
+    btnCopy.addEventListener("click", function() {
+        const textToCopy = "{{resultsurl}}";
+        navigator.clipboard.writeText(textToCopy).then(function() {
+            tooltip.style.display = "block";
+            tooltip.style.left = btnCopy.offsetLeft + btnCopy.offsetWidth + 5 + "px";
+            tooltip.style.top = btnCopy.offsetTop + (btnCopy.offsetHeight - tooltip.offsetHeight) / 2 + "px";
+            setTimeout(function() {
+            tooltip.style.display = "none";
+            }, 1000);
+        });
+    });
+
+</script>
+
+<style>
+
+    .copyblock {
+        background-color: rgba(228, 228, 228, 0.185) !important;
+    }
+
+    #tooltip {
+        display: none;
+        position: absolute;
+        padding: 5px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 4px;
+        font-size: 12px;
+        z-index: 1;
+    }
+
+</style>
+
+{%endblock content%}

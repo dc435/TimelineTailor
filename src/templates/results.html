@@ -1,0 +1,163 @@
+{%extends 'base.html' %}
+
+{%block content%}
+
+<div class="d-flex flex-column mb-3 align-items-center">
+    <p class="buffer"></p>
+    <h4><i>{{jobname}}</i></h4>
+</div>
+
+{% if results|length == 0 %}
+
+<div class="d-flex flex-column mb-3 align-items-center">
+    <p class="buffer"></p>
+    <h5 class="text-center">We were unable to extract any dated events from your text.</h5>
+</div>
+
+{% endif %}
+
+{% if results|length > 0 %}
+
+<div class="d-flex flex-column mb-3 align-items-centerr">
+    <h6 class="text-center"><i>(save the url of this page if you wish to access your results later)</i></h6>
+</div>
+
+<div class="d-flex flex-row-reverse p-1">
+    <span class="border rounded">
+        <button type="button border" class="btn btn-light p-2" data-toggle="tooltip" data-placement="top" title="Expand All" id="btnToggle">    
+            <span class="p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-arrows-expand" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8ZM7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2ZM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10Z"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-arrows-collapse" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8Zm7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0Zm-.5 11.707-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0v-3.793Z"/>
+                </svg>		
+            </span>
+        </button>        
+    </span>
+</div>
+
+<p style="min-height: 5px;"></p> 
+<div class="mb-3">
+   <div class="accordion" id="resultsAccordian">
+      {% for result in results %}    
+      <div class="accordion-item p-1">
+        <h2 class="accordion-header" id="accordian-header-{{result['id']}}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordian-collapse-{{result['id']}}" aria-expanded="true" aria-controls="accordian-collapse-{{result['id']}}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-11">
+                        <div class="row">
+                            <span class="col-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                                </svg>                    
+                            </span>
+                            <span class="col-2 datetext"><b>{{result['date_text']}}</b></span>
+                            <span class="col-9">{{result['description']}}</span>
+                        </div>
+                    </div>
+                    <div class="col-1 text-right" style="text-align: right;">
+                        <span class="text-right" style="font-size: 0.8em; font-style: italic;">{{result['length']}}</span>
+                    </div>
+                </div>
+            </div>
+          </button>
+        </h2>
+        {% for snippet in result['snippets'] %} 
+        <div id="accordian-collapse-{{result['id']}}" class="accordion-collapse collapse" aria-labelledby="#accordian-header-{{result['id']}}">
+          <div class="accordion-body">
+              <p>&nbsp;&nbsp;{{snippet['pre']}}<b>{{snippet['mid']}}</b>{{snippet['post']}}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}   
+    </div>
+</div>
+{% endif %}
+
+<style>
+
+    .accordion-button {
+        color: #212529;
+        background-color: rgba(212, 212, 212, 0.25) ;
+    }
+
+    .accordion-button:not(.collapsed) {
+        color: #212529;
+        background-color: rgba(212, 212, 212, 0.25) ;
+    }
+
+    #btnToggle:focus {
+        outline: none;
+        box-shadow: 0 0 0 5px #0d6ef630;
+    }
+
+    .accordion-item {
+        color: #212529;
+        background-color: rgba(255, 255, 255, 0.25) ;
+    }
+
+    .datetext {
+        /* min-width: 180px; */
+        text-align: right;
+    }
+
+</style>
+
+<script>
+
+let btnToggle = document.getElementById("btnToggle");
+let toggler = true
+let toggleTooltip = "Expand All"
+let iconExpand = document.querySelector(".bi-arrows-expand");
+let iconCollapse= document.querySelector(".bi-arrows-collapse");
+
+iconExpand.style.display = "inline";
+iconCollapse.style.display = "none";
+
+btnToggle.addEventListener("click", function(e) {
+
+    var accordionElements = document.querySelectorAll("[class^='accordion-collapse']");
+    var accordionButtons = document.querySelectorAll("[class^='accordion-button']");
+
+    if (toggler) {
+        accordionElements.forEach(function(element) {
+            if (!element.classList.contains("show")) {
+                element.classList.add("show");
+            }
+        });
+        accordionButtons.forEach(function(element) {
+            if (element.classList.contains("collapsed")) {
+                element.classList.remove("collapsed");
+            }
+        });
+        iconExpand.style.display = "none";
+        iconCollapse.style.display = "inline";
+        btnToggle.title = "Collapse All"
+        btnToggle.style.backgroundColor = "lightgray"
+        toggler = false;
+    } else {
+        accordionElements.forEach(function(element) {
+            if (element.classList.contains("show")) {
+                element.classList.remove("show");
+            }
+        });
+        accordionButtons.forEach(function(element) {
+            if (!element.classList.contains("collapsed")) {
+                element.classList.add("collapsed");
+            }
+        });
+        iconExpand.style.display = "inline";
+        iconCollapse.style.display = "none";
+        btnToggle.title = "Expand All"
+        btnToggle.style.backgroundColor = ""
+        toggler = true;
+    }
+
+});
+
+</script>
+
+{%endblock content%}
