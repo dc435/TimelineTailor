@@ -210,11 +210,11 @@ def get_job_name(
     ) -> dict:
 
     # Default return values:
-    reply = {'jobname': ""}
+    reply = ""
 
     try:
         from db_api import db_get_job_name
-        reply['jobname'] = db_get_job_name(engine,jobid)
+        reply = db_get_job_name(engine,jobid)
 
     except OperationalError:
 
@@ -226,4 +226,4 @@ def get_job_name(
 
     finally:
 
-        return reply['jobname']
+        return reply
