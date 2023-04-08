@@ -226,4 +226,4 @@ def get_job_name(
 
     finally:
 
-        return reply
+        return reply['jobname']
