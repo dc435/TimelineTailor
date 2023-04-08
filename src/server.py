@@ -87,7 +87,7 @@ app.add_middleware(
 )
 
 # Redirect all to https:
-# app.add_middleware(HTTPSRedirectMiddleware)
+app.add_middleware(HTTPSRedirectMiddleware)
 
 # =====================
 #  API: Home Page:
