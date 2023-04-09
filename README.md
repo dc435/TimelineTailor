@@ -1,6 +1,6 @@
 # TimelineTailor
 
-An event extraction and timeline building website, written in Python. Currently deployed at [Timeline Tailor](www.timelinetailor.com).
+An event extraction and timeline building website, written in Python.
 
 Timeline Tailor is a personal demonstration project to illustrate the author's skills in software design, natural language processing and deployment. Feel free to adopt the code base, or reach out if you have any queries.
 
