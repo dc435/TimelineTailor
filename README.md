@@ -7,7 +7,7 @@ Timeline Tailor is a personal demonstration project to illustrate the author's s
 
 # Overview
 
-This repository is the codebase for the frontend website presently deployed at www.timelinetailor.com.
+This repository is the codebase for the site presently deployed at www.timelinetailor.com.
 
 The app takes unstructured English-language text (up to 500,000 characters) are returns a timeline / chronological summary of the events described therein. The code in this repo:
 
