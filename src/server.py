@@ -11,7 +11,6 @@
 # Imports
 from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.templating import Jinja2Templates
 import uvicorn
 import hashlib
@@ -86,9 +85,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Redirect all to https:
-# app.add_middleware(HTTPSRedirectMiddleware)
-
 # =====================
 #  API: Home Page:
 # =====================
@@ -118,7 +114,7 @@ def new_job(
 
     try:
 
-        text = user_input['text']
+        text = user_input['text'][:500000]
         name = user_input['jobname'] if user_input['jobname'] != "" else text[:30]
         jobid = hashlib.sha1(bytes(text, 'utf-8')).hexdigest()
 
