@@ -14,7 +14,7 @@ The app takes unstructured English-language text (up to 500,000 characters) are 
 1. Serves the fronted;
 2. Coordinates messaging between the text-processing model, the database and the user.
 
-The substantive text-processing model is hosted on a separate repository.
+The substantive text-processing model is hosted on a separate repository (https://github.com/dc435/TimelineTailor_Model).
 
 
 # User Experience
