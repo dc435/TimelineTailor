@@ -25,25 +25,26 @@ def start_newjob(
         engine: Engine,
         model_api: str,
         model_key: str,
+        model_url: str,
         local_config: LocalConfig,
         std_error_message: str,
         std_success_message: str
     ):
-    
+
     log.info("'start_newjob called'. JobId: " + newjob.jobid)
 
     # Imports:
     from db_api import db_create_new_job
 
     # Try to add new job to DB. Then send to model for processing:
-    try: 
+    try:
 
         db_create_new_job(engine, newjob)
         log.info("Created new job in DB. JobId: " + newjob.jobid)
         background_tasks.add_task(send_to_model, newjob, log, engine, model_api, model_key, local_config, std_error_message, std_success_message)
 
     # Exception if job already exists on DB:
-    except IntegrityError: 
+    except IntegrityError:
 
         try:
 
@@ -54,11 +55,11 @@ def start_newjob(
                 log.info("Incoming job already complete / processing. JobId: " + newjob.jobid)
             if status == JobStatus.ERROR or status == JobStatus.CREATED:
                 db_update_job(engine,newjob.jobid,JobStatus.PROCESSING,user_update="Processing Job.")
-                background_tasks.add_task(send_to_model, newjob, log, engine, model_api, model_key, local_config, std_error_message, std_success_message)
+                background_tasks.add_task(send_to_model, newjob, log, engine, model_api, model_key, model_url, local_config, std_error_message, std_success_message)
                 log.info("Changed job status from Error/Created to 'PROCESSING'. Send job to process queue. Job: " + newjob.jobid)
 
         except: # Exception for DB connection:
-        
+
             log.exception("Could not query / amend status of existing job. JobId: " + newjob.jobid)
 
     except OperationalError: # Exception for DB connection:
@@ -66,7 +67,7 @@ def start_newjob(
         log.exception("DATABASE OFFLINE. Could not create new job in DB. JobId: " + newjob.jobid)
 
     except Exception:
-        
+
         log.exception("Could not create new job in DB. JobId: " + newjob.jobid)
 
 
@@ -80,11 +81,12 @@ def send_to_model(
         engine: Engine,
         model_api: str,
         model_key: str,
+        model_url: str,
         local_config: LocalConfig,
         std_error_message: str,
         std_success_message: str
     ):
-    
+
     log.info("'send_to_model called'. JobId: " + newjob.jobid)
 
     from model_api import model_process_job
@@ -107,11 +109,11 @@ def send_to_model(
 
     # Send to model for processing:
     try:
-        events = model_process_job(model_api, model_key, newjob, log, local_config)
+        events = model_process_job(model_api, model_key, model_url, newjob, log, local_config)
         log.info("Job processed by model. " + str(len(events)) + " events returned to send_to_model. Job: " + newjob.jobid)
     except ConnectionError:
         status = JobStatus.ERROR
-        log.exception("MODEL OFFLINE. Model could not process job. Job: " + newjob.jobid) 
+        log.exception("MODEL OFFLINE. Model could not process job. Job: " + newjob.jobid)
     except:
         status = JobStatus.ERROR
         log.exception("Model could not process job. Job: " + newjob.jobid)
@@ -169,7 +171,7 @@ def get_job_update(
     finally:
 
         return update
-    
+
 # =====================
 #  Get job results:
 # =====================
@@ -199,7 +201,7 @@ def get_results(
     finally:
 
         return results
-    
+
 # =====================
 #  Get job name:
 # =====================

@@ -2,7 +2,7 @@
 
 # TIMELINETAILOR.COM - server.py
 
-# This is the entry point for TimelineTailor. 
+# This is the entry point for TimelineTailor.
 # It is a front-end API which serves html Jinja templates
 # It calls other functions from 'job_processing', 'db_api' and 'model_api' to conduct text processing
 
@@ -42,6 +42,7 @@ db_database = config.DB_DATABASE
 db_password = config.DB_PASSWORD
 model_api = config.MODEL_API
 model_key = config.MODEL_KEY
+model_url = config.MODEL_URL
 
 # Connect to DB
 from sqlalchemy import create_engine
@@ -129,7 +130,7 @@ def new_job(
         url = "/processing/" + jobid
         message = ""
 
-        background_tasks.add_task(start_newjob, newjob, log, background_tasks, engine, model_api, model_key, local_config, std_error_message, std_success_message)
+        background_tasks.add_task(start_newjob, newjob, log, background_tasks, engine, model_api, model_key, model_url, local_config, std_error_message, std_success_message)
 
     except:
 
@@ -154,10 +155,10 @@ def processing(request: Request, jobid: str):
 # =====================
 @app.get("/get_update/{jobid}")
 def get_update(
-        request:Request, 
+        request:Request,
         jobid:str
     ) -> dict:
-    
+
     log.info("'/get_update/" + jobid + "' called from: " + str(request.client))
 
     done = False
@@ -185,20 +186,20 @@ def get_update(
     finally:
 
         return {'done':done,'error':error,'message':message}
-        
+
 
 # =====================
 #  API: Results Page:
 # =====================
 @app.get("/results/{jobid}")
 def results(request: Request, jobid: str):
-    
+
     log.info("'/get_results/" + jobid + "' called from: " + str(request.client))
 
     from shared_classes import Result
     results = [Result().json()]
     jobname = ""
-    
+
     try:
 
         from job_processing import get_results, get_job_name
@@ -206,7 +207,7 @@ def results(request: Request, jobid: str):
         jobname = get_job_name(jobid, engine, log)
 
     except ConnectionError:
-    
+
         log.error("BACKEND OFFLINE. Could not get results. Job: " + jobid)
 
     except:
@@ -237,5 +238,5 @@ def about(request: Request):
 # =====================
 #  RUN SERVER:
 # =====================
-if __name__ == '__main__': 
+if __name__ == '__main__':
     uvicorn.run(app, host=frontend_host,port=frontend_port)

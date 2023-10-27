@@ -5,7 +5,8 @@
 
 
 
-import banana_dev as banana
+# import banana_dev as banana
+from banana_dev import Client
 from shared_classes import NewJob, ModelOutput
 from db import Event
 import json
@@ -14,6 +15,7 @@ from logging import Logger
 def model_process_job(
         api_key: str,
         model_key: str,
+        model_url: str,
         newjob: NewJob,
         log: Logger,
         local_config: bool
@@ -38,7 +40,10 @@ def model_process_job(
     else:
 
         model_input = newjob.dict()
-        response = banana.run(api_key, model_key, model_input)  
+
+        my_model = Client(url=model_url, api_key=api_key)
+        response, meta = my_model.call("/",model_input)
+        # response = banana.run(api_key, model_key, model_input)
         modelOutput = json.loads(response['modelOutputs'][0])
         modelOutput = ModelOutput(**modelOutput)
         events = []
