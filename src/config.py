@@ -22,7 +22,7 @@ class DockerConfig(Config):
 
     def __init__(self):
 
-        self.FRONTEND_HOST = "0.0.0.0" 
+        self.FRONTEND_HOST = "0.0.0.0"
         self.FRONTEND_PORT = 80
         self.TEMPLATES_DIR = "../app/templates"
         self.BASE_HREF = os.environ.get("BASE_HREF")
@@ -41,7 +41,7 @@ class DockerConfig(Config):
         db_details = json.loads(db_response['SecretString'])
         model_response = client.get_secret_value(SecretId=model_secret_name)
         model_details = json.loads(model_response['SecretString'])
-        
+
         self.DB_DRIVERNAME="postgresql+psycopg2"
         self.DB_USERNAME= db_details['username']
         self.DB_HOST = db_details['host']
@@ -51,6 +51,7 @@ class DockerConfig(Config):
 
         self.MODEL_API = model_details['model_api']
         self.MODEL_KEY = model_details['model_key']
+        self.MODEL_URL = model_details['model_url']
 
         self.LOCAL_CONFIG = False
 
@@ -60,7 +61,7 @@ class LocalConfig(Config):
 
         self.FRONTEND_HOST = "localhost"
         self.FRONTEND_PORT = 8000
-        self.TEMPLATES_DIR = os.getcwd() + "/src/templates/" 
+        self.TEMPLATES_DIR = os.getcwd() + "/src/templates/"
         self.BASE_HREF = "http://localhost:8000"
 
         self.DB_DRIVERNAME="postgresql+psycopg2"
