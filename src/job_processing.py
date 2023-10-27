@@ -41,7 +41,7 @@ def start_newjob(
 
         db_create_new_job(engine, newjob)
         log.info("Created new job in DB. JobId: " + newjob.jobid)
-        background_tasks.add_task(send_to_model, newjob, log, engine, model_api, model_key, local_config, std_error_message, std_success_message)
+        background_tasks.add_task(send_to_model, newjob, log, engine, model_api, model_key, model_url, local_config, std_error_message, std_success_message)
 
     # Exception if job already exists on DB:
     except IntegrityError:
