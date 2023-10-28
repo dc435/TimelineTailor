@@ -44,8 +44,9 @@ def model_process_job(
         my_model = Client(url=model_url, api_key=api_key)
         response, meta = my_model.call("/",model_input)
         # response = banana.run(api_key, model_key, model_input)
-        modelOutput = json.loads(response['modelOutputs'][0])
-        modelOutput = ModelOutput(**modelOutput)
+        # modelOutput = json.loads(response['modelOutputs'][0])
+        # modelOutput = ModelOutput(**modelOutput)
+        modelOutput = ModelOutput(**response)
         events = []
         if modelOutput.success:
             for e in modelOutput.events:
