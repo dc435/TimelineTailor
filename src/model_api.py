@@ -5,7 +5,6 @@
 
 
 
-# import banana_dev as banana
 from banana_dev import Client
 from shared_classes import NewJob, ModelOutput
 from db import Event
@@ -25,6 +24,7 @@ def model_process_job(
 
         url = "http://localhost:8002/"
 
+        # Process locally:
         import requests
         response = requests.post(url, newjob.json())
         modelOutput = json.loads(response.json())
@@ -41,11 +41,9 @@ def model_process_job(
 
         model_input = newjob.dict()
 
+        # Send to Bananna for processing:
         my_model = Client(url=model_url, api_key=api_key)
         response, meta = my_model.call("/",model_input)
-        # response = banana.run(api_key, model_key, model_input)
-        # modelOutput = json.loads(response['modelOutputs'][0])
-        # modelOutput = ModelOutput(**modelOutput)
         modelOutput = ModelOutput(**response)
         events = []
         if modelOutput.success:
