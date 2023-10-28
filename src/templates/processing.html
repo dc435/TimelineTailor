@@ -11,11 +11,11 @@
           <span class="sr-only"></span>
         </div>
     </div>
-    <p class="buffer"></p>    
+    <p class="buffer"></p>
     <p id="status_update" class="fst-italic">Your job is processing.</p>
     <p class="buffer"></p>
     <p class="buffer"></p>
-    <h6 class="text-center">Processing may take several minutes, especially for larger texts. When the job is processed, your results will be available at the url below. Save the url if you wish to access your results later:</h6>
+    <h5 class="text-center">Why the wait? We use a serverless GPU to perform the text processing, which needs to undergo a 'cold start' if it has not been called for a while. This may take several minutes. When the job is processed, your results will be available at the url below. Save the url if you wish to access your results later:</h5>
     <p class="buffer"></p>
     <div>
         <span class="border rounded copyblock p-4" id="btnCopy">
@@ -25,17 +25,17 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
                     <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
                     <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
-                </svg>   
+                </svg>
             </button>
             <div id="tooltip">Copied</div>
-        </span>               
+        </span>
     </div>
     <p class="p-2"><small id="copyUpdate" ></small></p>
 </div>
 
 
 <script type = "text/javascript">
-    
+
     const status_update = document.getElementById("status_update");
 
     setInterval(function() {
