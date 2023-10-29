@@ -22,13 +22,17 @@ def model_process_job(
 
     if local_config:
 
-        url = "http://localhost:8002/"
+        # url = "http://localhost:8000/"
+        # import requests
+        # response = requests.post(url, newjob.json())
+        # modelOutput = json.loads(response.json())
+        # modelOutput = ModelOutput(**modelOutput)
 
         # Process locally:
-        import requests
-        response = requests.post(url, newjob.json())
-        modelOutput = json.loads(response.json())
-        modelOutput = ModelOutput(**modelOutput)
+        model_input = newjob.dict()
+        my_model = Client(url=model_url, api_key=api_key)
+        response, meta = my_model.call("/",model_input)
+        modelOutput = ModelOutput(**response)
         events = []
         if modelOutput.success:
             for e in modelOutput.events:

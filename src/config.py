@@ -60,9 +60,9 @@ class LocalConfig(Config):
     def __init__(self):
 
         self.FRONTEND_HOST = "localhost"
-        self.FRONTEND_PORT = 8000
+        self.FRONTEND_PORT = 8001
         self.TEMPLATES_DIR = os.getcwd() + "/src/templates/"
-        self.BASE_HREF = "http://localhost:8000"
+        self.BASE_HREF = "http://localhost:8001"
 
         self.DB_DRIVERNAME="postgresql+psycopg2"
         self.DB_USERNAME="postgres"
@@ -70,10 +70,12 @@ class LocalConfig(Config):
         self.DB_PORT="5432"
         self.DB_DATABASE="timeline_1"
         self.DB_PASSWORD=input("Enter DB password:")
-        # self.MODEL_API=input("Enter Model API:") # If using remote model
-        # self.MODEL_KEY=input("Enter Model Key:") # If using remote model
-        self.MODEL_API="x"
-        self.MODEL_KEY="x"
+        self.MODEL_API=input("Enter Model API:") # If using remote model
+        self.MODEL_KEY=input("Enter Model Key:") # If using remote model
+        self.MODEL_URL=input("Enter Model URL:") # If using remote model
+        # self.MODEL_API="x"
+        # self.MODEL_KEY="x"
+        # self.MODEL_URL="http://localhost:8000"
         self.LOCAL_CONFIG = True
 
 def get_config(log: Logger):
