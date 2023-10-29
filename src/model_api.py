@@ -48,7 +48,9 @@ def model_process_job(
         # Send to Bananna for processing:
         my_model = Client(url=model_url, api_key=api_key)
         response, meta = my_model.call("/",model_input)
+        log.info("Received response:" + response)
         modelOutput = ModelOutput(**response)
+        log.info("Model output:" + modelOutput)
         events = []
         if modelOutput.success:
             for e in modelOutput.events:
