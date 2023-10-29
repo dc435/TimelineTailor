@@ -9,9 +9,10 @@
     <p class="buffer"></p>
     <p class="buffer"></p>
     <h5 class="text-center">Paste your text below. <i>Timeline Tailor</i> will produce a chronology of the events it describes.</h5>
+	<h5 class="text-center">How does it work? We take your text input and use a language processing tool (called a 'date entity recogniser') to identify the dates in the text, such as '1 January 2000'. We then use a second model (called a 't5 transformer') to provide a description of that event based on the text surrounding that date!</h5>
     <h5 class="text-center">Click <a href="https://www.timelinetailor.com/help/" target="_blank">here</a> for further instructions and examples.</h5>
 	<p class="buffer"></p>
-	<textarea class="form-control" id="textArea" rows="15" placeholder="Paste your source text here"></textarea>    
+	<textarea class="form-control" id="textArea" rows="15" placeholder="Paste your source text here"></textarea>
 	<p class="buffer"></p>
 	<div>
 		<span class="p-2"></span>
@@ -22,13 +23,13 @@
 			</svg>
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="limegreen" class="bi bi-check-lg" viewBox="0 0 16 16">
 				<path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
-			</svg>				
+			</svg>
 		</span>
 	</div>
 	<p>Max: 500,000 characters (~100,000 words)</p>
 	<p class="buffer"></p>
 	<div class="d-flex justify-content-center">
-		<input class="form-control text-center" id="jobname" type="text" placeholder="Your Reference (optional)">	
+		<input class="form-control text-center" id="jobname" type="text" placeholder="Your Reference (optional)">
 	</div>
     <p class="buffer"></p>
     <button type="button" class="btn btn-primary btn-lg" id="UploadBtn" style><b>Get Timeline</b></button>
@@ -97,7 +98,7 @@ textArea.addEventListener("input", function(e) {
 });
 
 uploadButton.addEventListener("click", function(e) {
-	
+
 	text = textArea.value;
 	charCount = text.length;
 
@@ -122,7 +123,7 @@ uploadButton.addEventListener("click", function(e) {
 				window.alert(response.message);
 			}
 		});
-				
+
 	} else {
 
 		if (charCount > maxChar) {
