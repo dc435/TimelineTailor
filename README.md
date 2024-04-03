@@ -7,7 +7,7 @@ Timeline Tailor is a personal demonstration project to illustrate the author's s
 
 # Overview
 
-This repository is the codebase for the site presently deployed at www.timelinetailor.com.
+This repository is the codebase for a timeline generation website. It is not currently depoloyed.
 
 The app takes unstructured English-language text (up to 500,000 characters) are returns a timeline / chronological summary of the events described therein. The code in this repo:
 
@@ -21,7 +21,7 @@ The substantive text-processing model is hosted on a separate repository (https:
 
 ## Home screen
 
-The user can paste any unstructured English text into the home screen text-box. A limit of 500,000 characters is imposed. 
+The user can paste any unstructured English text into the home screen text-box. A limit of 500,000 characters is imposed.
 
 ![homescreen](/src/img/homescreen.png)
 
